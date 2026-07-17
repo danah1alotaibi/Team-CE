@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer Engineering — Class of 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0F19;
+    --bg-2:#111827;
+    --gold:#D4AF37;
+    --cyan:#38BDF8;
+    --text:#F5F5F4;
+    --text-dim:#9CA3AF;
+    --line:rgba(212,175,55,0.18);
+    --glass:rgba(255,255,255,0.04);
+    --glass-border:rgba(255,255,255,0.09);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    overflow-x:hidden;
+    position:relative;
+  }
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background:
+      radial-gradient(ellipse 60% 40% at 15% 8%, rgba(212,175,55,0.08), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 90% 15%, rgba(56,189,248,0.07), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 50% 100%, rgba(212,175,55,0.05), transparent 60%);
+    pointer-events:none;
+    z-index:0;
+  }
+  ::selection{background:var(--gold);color:#0B0F19;}
+
+  /* Loader */
+  #loader{
+    position:fixed;inset:0;z-index:9999;
+    background:var(--bg);
+    display:flex;align-items:center;justify-content:center;
+    flex-direction:column;gap:18px;
+    transition:opacity .8s ease, visibility .8s ease;
+  }
+  #loader.hidden{opacity:0;visibility:hidden;}
+  .loader-mark{
+    font-family:'Cormorant Garamond',serif;
+    font-size:2.2rem;letter-spacing:.3em;
+    color:var(--gold);
+    opacity:0;
+    animation:loaderFade 1.6s ease forwards;
+  }
+  .loader-line{
+    width:0;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    animation:loaderLine 1.6s ease forwards .2s;
+  }
+  @keyframes loaderFade{ to{opacity:1;} }
+  @keyframes loaderLine{ to{width:220px;} }
+
+  a{color:inherit;text-decoration:none;}
+  .eyebrow{
+    font-size:.72rem;letter-spacing:.35em;text-transform:uppercase;
+    color:var(--gold);font-weight:500;
+  }
+  h1,h2,h3{font-family:'Cormorant Garamond',serif;font-weight:500;}
+
+  /* Nav */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:500;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 6vw;
+    backdrop-filter:blur(14px);
+    background:rgba(11,15,25,0.55);
+    border-bottom:1px solid rgba(255,255,255,0.05);
+    transition:padding .35s ease, background .35s ease;
+  }
+  nav.scrolled{padding:12px 6vw;background:rgba(11,15,25,0.85);}
+  .brand{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.35rem;letter-spacing:.08em;
+    display:flex;align-items:center;gap:10px;
+  }
+  .brand-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold);}
+  .nav-links{display:flex;gap:2.4rem;font-size:.85rem;letter-spacing:.05em;}
+  .nav-links a{
+    position:relative;color:var(--text-dim);transition:color .3s ease;padding:4px 0;
+  }
+  .nav-links a::after{
+    content:"";position:absolute;left:0;bottom:0;width:0;height:1px;
+    background:var(--gold);transition:width .3s ease;
+  }
+  .nav-links a:hover{color:var(--text);}
+  .nav-links a:hover::after{width:100%;}
+  .nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
+  .nav-toggle span{width:22px;height:1px;background:var(--text);}
+
+  /* Sections base */
+  section{position:relative;z-index:1;padding:140px 6vw;}
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s ease, transform .9s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  /* Hero */
+  #hero{
+    min-height:100vh;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    text-align:center;padding-top:100px;
+  }
+  .hero-eyebrow{margin-bottom:22px;}
+  .hero-title{
+    font-size:clamp(2.6rem,7vw,5.5rem);
+    line-height:1.05;
+    background:linear-gradient(120deg,#fff 30%,var(--gold) 65%,#fff 90%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    background-size:200% auto;
+    animation:shine 6s linear infinite;
+    max-width:16ch;
+  }
+  @keyframes shine{ to{background-position:200% center;} }
+  .hero-sub{
+    margin-top:20px;font-size:clamp(1rem,1.6vw,1.25rem);
+    color:var(--text-dim);letter-spacing:.04em;
+    font-weight:300;
+  }
+  .hero-divider{
+    width:60px;height:1px;background:var(--gold);margin:34px auto;
+    box-shadow:0 0 12px var(--gold);
+  }
+  .hero-desc{
+    max-width:640px;margin:0 auto;color:var(--text-dim);
+    font-size:1rem;line-height:1.85;font-weight:300;
+  }
+  .scroll-cue{
+    margin-top:70px;display:flex;flex-direction:column;align-items:center;gap:10px;
+    color:var(--text-dim);font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;
+  }
+  .scroll-cue span{
+    width:1px;height:36px;background:linear-gradient(var(--gold),transparent);
+    animation:scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse{0%,100%{opacity:.2;}50%{opacity:1;}}
+
+  /* Section headers */
+  .section-head{text-align:center;max-width:720px;margin:0 auto 64px;}
+  .section-head h2{font-size:clamp(2rem,4vw,3rem);margin-top:14px;}
+  .section-head p{color:var(--text-dim);margin-top:18px;font-weight:300;line-height:1.8;}
+
+  /* About */
+  .about-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:28px;max-width:1100px;margin:60px auto 0;
+  }
+  .about-card{
+    background:var(--glass);border:1px solid var(--glass-border);
+    border-radius:18px;padding:32px 24px;text-align:center;
+    backdrop-filter:blur(10px);
+    transition:transform .4s ease, border-color .4s ease, box-shadow .4s ease;
+  }
+  .about-card:hover{
+    transform:translateY(-8px);
+    border-color:var(--line);
+    box-shadow:0 20px 40px -20px rgba(212,175,55,0.25);
+  }
+  .about-icon{
+    width:44px;height:44px;margin:0 auto 18px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,rgba(212,175,55,.18),rgba(56,189,248,.12));
+    border:1px solid var(--line);
+    color:var(--gold);font-size:1.1rem;
+  }
+  .about-card h3{font-size:1.25rem;margin-bottom:8px;font-weight:500;}
+  .about-card p{color:var(--text-dim);font-size:.88rem;line-height:1.7;font-weight:300;}
+
+  /* Members */
+  .members-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:1240px;margin:0 auto;
+  }
+  .member-card{
+    background:linear-gradient(160deg, rgba(255,255,255,0.055), rgba(255,255,255,0.015));
+    border:1px solid var(--glass-border);
+    border-radius:22px;
+    padding:38px 30px 30px;
+    text-align:center;
+    position:relative;
+    backdrop-filter:blur(12px);
+    transition:transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .45s ease, border-color .45s ease;
+    overflow:hidden;
+  }
+  .member-card::before{
+    content:"";position:absolute;inset:0;border-radius:22px;padding:1px;
+    background:linear-gradient(135deg,var(--gold),transparent 30%,transparent 70%,var(--cyan));
+    -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+    opacity:0;transition:opacity .45s ease;
+  }
+  .member-card:hover::before{opacity:.55;}
+  .member-card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 30px 60px -30px rgba(0,0,0,0.6), 0 0 40px -20px rgba(212,175,55,0.2);
+    border-color:transparent;
+  }
+  .avatar{
+    width:92px;height:92px;border-radius:50%;
+    margin:0 auto 22px;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Cormorant Garamond',serif;
+    font-size:2rem;color:#0B0F19;font-weight:600;
+    position:relative;
+    box-shadow:0 0 0 1px var(--glass-border), 0 12px 30px -10px rgba(212,175,55,0.35);
+  }
+  .avatar::after{
+    content:"";position:absolute;inset:-5px;border-radius:50%;
+    border:1px solid var(--line);
+  }
+  .member-card h3{font-size:1.4rem;margin-bottom:14px;letter-spacing:.02em;}
+  .member-card p.bio{
+    color:var(--text-dim);font-size:.86rem;line-height:1.75;font-weight:300;
+    text-align:left;margin-bottom:24px;
+  }
+  .socials{display:flex;justify-content:center;gap:14px;}
+  .social-btn{
+    width:38px;height:38px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--glass-border);
+    background:rgba(255,255,255,0.02);
+    color:var(--text-dim);
+    transition:all .3s ease;
+  }
+  .social-btn:hover{
+    color:#0B0F19;background:var(--gold);border-color:var(--gold);
+    box-shadow:0 0 18px rgba(212,175,55,0.5);
+    transform:translateY(-3px);
+  }
+  .social-btn svg{width:16px;height:16px;}
+
+  /* Footer */
+  footer{
+    padding:70px 6vw 40px;text-align:center;
+    border-top:1px solid rgba(255,255,255,0.06);
+    position:relative;z-index:1;
+  }
+  footer .brand{justify-content:center;margin-bottom:14px;}
+  footer .foot-sub{color:var(--text-dim);font-size:.85rem;font-weight:300;letter-spacing:.02em;}
+  footer .foot-line{
+    width:44px;height:1px;background:var(--gold);margin:22px auto;opacity:.6;
+  }
+  footer .copy{color:#565f6f;font-size:.75rem;margin-top:24px;letter-spacing:.03em;}
+
+  /* Responsive */
+  @media (max-width:980px){
+    .about-grid{grid-template-columns:repeat(2,1fr);}
+    .members-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:760px){
+    .nav-links{
+      position:fixed;top:0;right:0;height:100vh;width:min(78vw,320px);
+      background:rgba(11,15,25,0.98);
+      flex-direction:column;justify-content:center;align-items:center;gap:2.2rem;
+      transform:translateX(100%);transition:transform .45s ease;
+      border-left:1px solid var(--glass-border);
+    }
+    .nav-links.open{transform:translateX(0);}
+    .nav-toggle{display:flex;}
+    .about-grid{grid-template-columns:1fr;}
+    .members-grid{grid-template-columns:1fr;}
+    section{padding:100px 6vw;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="loader-mark">CE · 2027</div>
+  <div class="loader-line"></div>
+</div>
+
+<nav id="navbar">
+  <div class="brand"><span class="brand-dot"></span>CE '27</div>
+  <div class="nav-links" id="navLinks">
+    <a href="#hero" class="nav-link">Home</a>
+    <a href="#about" class="nav-link">About</a>
+    <a href="#members" class="nav-link">Members</a>
+    <a href="#footer" class="nav-link">Contact</a>
+  </div>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<section id="hero">
+  <div class="hero-eyebrow eyebrow">College of Computers and Information Technology</div>
+  <h1 class="hero-title">Computer Engineering<br>Class of 2027</h1>
+  <div class="hero-divider"></div>
+  <p class="hero-desc">
+    Eleven future computer engineers united by curiosity and discipline — building at the intersection of
+    artificial intelligence, software engineering, embedded systems, and cybersecurity. This is a graduating
+    class shaped by research, hands-on engineering, and a shared commitment to responsible innovation.
+  </p>
+  <div class="scroll-cue"><span></span>Scroll</div>
+</section>
+
+<section id="about">
+  <div class="section-head reveal">
+    <div class="eyebrow">About the Team</div>
+    <h2>Engineers in the making</h2>
+    <p>
+      Eleven students of the Computer Engineering program, Class of 2027, brought together by a shared drive
+      for technical excellence. Across coursework, research, hackathons, and industry training, this class has
+      built a culture of collaboration, leadership, and continuous learning — turning ideas into working systems
+      and challenges into disciplined engineering practice.
+    </p>
+  </div>
+  <div class="about-grid">
+    <div class="about-card reveal">
+      <div class="about-icon">◆</div>
+      <h3>Collaboration</h3>
+      <p>Eleven engineers, one class — working across disciplines to bring shared projects to life.</p>
+    </div>
+    <div class="about-card reveal">
+      <div class="about-icon">▲</div>
+      <h3>Leadership</h3>
+      <p>Club presidents, team leads, and organizers driving initiatives across campus and industry.</p>
+    </div>
+    <div class="about-card reveal">
+      <div class="about-icon">●</div>
+      <h3>Research &amp; Innovation</h3>
+      <p>From AI models to embedded prototypes, a class that learns by building and testing.</p>
+    </div>
+    <div class="about-card reveal">
+      <div class="about-icon">■</div>
+      <h3>Technical Excellence</h3>
+      <p>Certifications, hackathon finals, and industry training backing every profile in this class.</p>
+    </div>
+  </div>
+</section>
+
+<section id="members">
+  <div class="section-head reveal">
+    <div class="eyebrow">The Class</div>
+    <h2>Meet the Members</h2>
+    <p>Eleven engineers. Eleven paths. One graduating class.</p>
+  </div>
+  <div class="members-grid" id="membersGrid"></div>
+</section>
+
+<footer id="footer">
+  <div class="brand"><span class="brand-dot"></span>CE '27</div>
+  <div class="foot-sub">Computer Engineering – Class of 2027</div>
+  <div class="foot-sub">College of Computers and Information Technology</div>
+  <div class="foot-line"></div>
+  <div class="copy">Crafted with care by the Class of 2027</div>
+</footer>
+
+<script>
+(function(){
+  // Loader
+  window.addEventListener('load', () => {
+    setTimeout(() => document.getElementById('loader').classList.add('hidden'), 700);
+  });
+
+  // Nav scroll state
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  document.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // Scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+
+  // Members data
+  const members = [
+    {
+      name: "Ghaida Althomali",
+      bio: "Motivated student with 3.9+ GPA , strong interest in academic research. Gained hands-on experience at the Digital Transformation Agency in AI model development, data analysis, system operations, and dashboard creation. Completed training at Smart Methods Company and contributed to multiple technical projects. Additionally, completed 400+ volunteer hours as a leader through Taqat and university student clubs . developing strong leadership, teamwork, and communication skills.",
+      linkedin: "https://www.linkedin.com/in/eng-ghaidaahassan",
+      github: "https://github.com/ENG-ghaidaa"
+    },
+    {
+      name: "Danah alotaibi",
+      bio: "Computer Engineering student with a 3.75 GPA, 20+ professional certifications, and finalist experience in 5+ hackathons. Currently training at KAUST, King Fahd Air Base, and Smart Methods through two on-site programs and one online program. President of Athar Tech Club, selected based on faculty nomination. Skilled in AI, Python, C++, Arduino, hardware integration, and system development.",
+      linkedin: "https://www.linkedin.com/in/danah-f-alotaibi",
+      x: "https://x.com/danah1alotaibi?s=11",
+      github: "https://github.com/danah1alotaibi"
+    },
+    {
+      name: "Hind alkhalidi",
+      bio: "Computer Engineering student at Taif University with a 3.77/4.00 GPA, passionate about building innovative solutions through Internet of Things (IoT) and Embedded Systems. I enjoy turning ideas into practical applications and continuously expanding my knowledge through hands-on projects and emerging technologies. Eager to contribute to impactful engineering projects while developing my technical, problem-solving, and teamwork skills.",
+      linkedin: "https://www.linkedin.com/in/hind-alkhalidi-812778300",
+      github: "https://github.com/engHind"
+    },
+    {
+      name: "Emtenan A. Asiri",
+      bio: "Computer Engineering student with a 3.8/4.0 GPA, specializing in AI Engineering, Robotics Engineering, and Embedded Systems. Developed multiple projects using Artificial Intelligence and IoT technologies. Currently serving as the Leader of the Robotics Engineering Club and Vice Leader of the Ertwa Tech Platform, combining technical expertise with leadership and innovation.",
+      linkedin: "https://www.linkedin.com/in/emtenan-asiri-a255172a6",
+      github: "https://github.com/emtenan753-cpu"
+    },
+    {
+      name: "Taghreed Ahmed Alshehri",
+      bio: "Computer Engineering student at Taif University with a focus on embedded systems and AI. Experienced in technical event organization, leadership, and media production (content creation & editing). Passionate about teamwork, continuous learning, and impactful tech initiatives.",
+      linkedin: "https://www.linkedin.com/in/talshehri",
+      x: "https://x.com/uevn_"
+    },
+    {
+      name: "Shahad alshehri",
+      bio: "Computer Engineering student passionate about the field of data, including Data Engineering, Database Management, and Data Analytics. Interested in building data-driven solutions that support informed decision-making. Experienced with Django, PostgreSQL, Docker, and Git/GitHub through hands-on projects. Recognized for strong organizational skills, teamwork, problem-solving, and a commitment to continuous learning and professional growth.",
+      linkedin: "https://www.linkedin.com/in/shahad-m-alshehri-a4782a273",
+      github: "https://github.com/shjg77"
+    },
+    {
+      name: "Layan alghamdi",
+      bio: "Computer Engineering student with a strong passion for Artificial Intelligence and developing intelligent systems for real-world applications. Interested in AI Engineering, NLP, Computer Vision, AI Agents, and Embedded Systems. Participated in 3+ hackathons and completed 120+ volunteer hours through student clubs, contributing to technical events, leadership, and community initiatives. Currently training as an AI Engineering Intern at Mohtawa Company, where I work on practical AI solutions and expand my expertise in modern AI technologies. Always eager to learn, collaborate, and contribute to impactful AI-driven projects.",
+      linkedin: "https://www.linkedin.com/in/layan-m-alghamdi-09b666330",
+      x: "https://x.com/llaymohd"
+    },
+    {
+      name: "Jood Mohammed",
+      bio: "Passionate about Embedded Systems and Software Development. Worked on Arduino-based projects using C++, and used SQL and MATLAB in academic projects. Completed a cooperative training at the Digital Transformation Department, Taif Governorate Municipality, gaining practical experience in digital transformation initiatives. Currently learning web development using HTML, CSS, and JavaScript through practical projects. Interested in continuous learning, teamwork, and developing practical technology solutions.",
+      linkedin: "https://www.linkedin.com/in/jood-mohammed-758051334",
+      github: "https://github.com/Jood143"
+    },
+    {
+      name: "Rimas albogami",
+      bio: "Computer Engineering student passionate about Artificial Intelligence, Data Analytics, and Embedded Systems. Holder of the INE Data Analytics Certification with training experience across research, academic, government, and industry organizations. Committed to continuous growth by developing a new project every week and transforming innovative ideas into practical engineering solutions.",
+      linkedin: "https://www.linkedin.com/in/rimas-albogami-79b92a307",
+      x: "https://x.com/iwxr19",
+      github: "https://github.com/Rimasalbugami"
+    },
+    {
+      name: "Dhay alotaibi",
+      bio: "Senior Computer Engineering student at Taif University. interested in hardware design, embedded systems, and IoT. I have completed +4 hardware and IoT projects and contributed +300 volunteer hours. For more, you can find my work and updates here.",
+      linkedin: "https://www.linkedin.com/in/dhay-a-alotaibi",
+      github: "https://github.com/Dhay-Alotaibi",
+      x: "https://x.com/eng_dhay"
+    },
+    {
+      name: "Tala alotaibi",
+      bio: "Computer Engineering student at Taif University with a GPA of 3.85+ and a solid technical foundation in Artificial Intelligence, Computer Networks, Embedded Systems, and IoT. Experienced in developing technical projects using Python, C++, MATLAB, and ESP32. Active in student organizations with over 600 volunteer hours, where I developed leadership, teamwork, public relations, and graphic design skills. Currently gaining practical experience through training at King Fahd Air Base and Smart Methods, where I apply technical knowledge in real-world environments. Focused on building innovative solutions to real-world challenges through continuous learning and hands-on experience.",
+      linkedin: "https://linkedin.com/in/talaalotaibi",
+      x: "https://x.com/_1talaa",
+      github: "https://github.com/Eng-Talaa"
+    }
+  ];
+
+  const gradients = [
+    "linear-gradient(135deg,#D4AF37,#8a6f1f)",
+    "linear-gradient(135deg,#38BDF8,#1c6f96)",
+    "linear-gradient(135deg,#D4AF37,#38BDF8)",
+    "linear-gradient(135deg,#8a6f1f,#D4AF37)",
+    "linear-gradient(135deg,#1c6f96,#38BDF8)",
+    "linear-gradient(135deg,#38BDF8,#D4AF37)"
+  ];
+
+  const icons = {
+    linkedin: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67h-3.56V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>',
+    x: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.94 10.6 20.6 3h-1.58l-5.79 6.6L8.6 3H3l6.98 9.98L3 21h1.58l6.12-6.98L15.4 21H21l-7.06-10.4zm-2.17 2.47-.71-1L5.4 4.2h2.43l4.55 6.37.71 1 5.92 8.28h-2.43l-4.81-6.78z"/></svg>',
+    github: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.2c0 4.5 2.87 8.32 6.84 9.67.5.1.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.46-1.19-1.11-1.51-1.11-1.51-.91-.64.07-.63.07-.63 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.05a9.3 9.3 0 0 1 5 0c1.9-1.32 2.75-1.05 2.75-1.05.55 1.42.2 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.47-.01 2.81 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.2C22 6.58 17.52 2 12 2z"/></svg>'
+  };
+
+  function initials(name){
+    return name.split(' ').filter(Boolean).slice(0,2).map(w => w[0].toUpperCase()).join('');
+  }
+
+  const grid = document.getElementById('membersGrid');
+  members.forEach((m, i) => {
+    const card = document.createElement('div');
+    card.className = 'member-card reveal';
+    const socialLinks = ['linkedin','x','github']
+      .filter(k => m[k])
+      .map(k => `<a class="social-btn" href="${m[k]}" target="_blank" rel="noopener noreferrer" aria-label="${m.name} on ${k}">${icons[k]}</a>`)
+      .join('');
+    card.innerHTML = `
+      <div class="avatar" style="background:${gradients[i % gradients.length]}">${initials(m.name)}</div>
+      <h3>${m.name}</h3>
+      <p class="bio">${m.bio}</p>
+      <div class="socials">${socialLinks}</div>
+    `;
+    grid.appendChild(card);
+  });
+
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+})();
+</script>
+</body>
+</html>
