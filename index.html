@@ -198,6 +198,8 @@
     -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite:xor;mask-composite:exclude;
     opacity:0;transition:opacity .45s ease;
+    pointer-events:none;
+    z-index:0;
   }
   .member-card:hover::before{opacity:.55;}
   .member-card:hover{
@@ -223,21 +225,27 @@
     color:var(--text-dim);font-size:.86rem;line-height:1.75;font-weight:300;
     text-align:left;margin-bottom:24px;
   }
-  .socials{display:flex;justify-content:center;gap:14px;}
+  .socials{
+    display:flex;justify-content:center;gap:14px;
+    position:relative;z-index:10;
+  }
   .social-btn{
     width:38px;height:38px;border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
+    display:inline-flex;align-items:center;justify-content:center;
     border:1px solid var(--glass-border);
     background:rgba(255,255,255,0.02);
     color:var(--text-dim);
     transition:all .3s ease;
+    position:relative;z-index:10;
+    cursor:pointer;
+    pointer-events:auto;
   }
   .social-btn:hover{
     color:#0B0F19;background:var(--gold);border-color:var(--gold);
     box-shadow:0 0 18px rgba(212,175,55,0.5);
     transform:translateY(-3px);
   }
-  .social-btn svg{width:16px;height:16px;}
+  .social-btn svg{width:16px;height:16px;pointer-events:none;}
 
   /* Footer */
   footer{
@@ -396,7 +404,7 @@
       name: "Danah alotaibi",
       bio: "Computer Engineering student with a 3.75 GPA, 20+ professional certifications, and finalist experience in 5+ hackathons. Currently training at KAUST, King Fahd Air Base, and Smart Methods through two on-site programs and one online program. President of Athar Tech Club, selected based on faculty nomination. Skilled in AI, Python, C++, Arduino, hardware integration, and system development.",
       linkedin: "https://www.linkedin.com/in/danah-f-alotaibi",
-      x: "https://x.com/danah1alotaibi?s=11",
+      x: "https://x.com/danah1alotaibi",
       github: "https://github.com/danah1alotaibi"
     },
     {
@@ -481,9 +489,10 @@
   members.forEach((m, i) => {
     const card = document.createElement('div');
     card.className = 'member-card reveal';
+    const platformNames = { linkedin: 'LinkedIn', x: 'X (Twitter)', github: 'GitHub' };
     const socialLinks = ['linkedin','x','github']
       .filter(k => m[k])
-      .map(k => `<a class="social-btn" href="${m[k]}" target="_blank" rel="noopener noreferrer" aria-label="${m.name} on ${k}">${icons[k]}</a>`)
+      .map(k => `<a class="social-btn" href="${m[k]}" target="_blank" rel="noopener noreferrer" aria-label="${m.name} on ${platformNames[k]}">${icons[k]}</a>`)
       .join('');
     card.innerHTML = `
       <div class="avatar" style="background:${gradients[i % gradients.length]}">${initials(m.name)}</div>
